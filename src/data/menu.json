@@ -1,0 +1,97 @@
+{
+  "data": [ 
+    {
+      "headTitle1": "Dashboard Analytics",
+      "headTitle2": "Records and Analytics",
+      "type": "headtitle"
+    },
+    {
+      "path": "/dashboard",
+      "title": "Dashboard", 
+      "icon": "home", 
+      "type": "link",  
+      "active": false
+    },
+    {
+      "path": "/user-account",
+      "title": "Account", 
+      "icon": "user", 
+      "type": "link",  
+      "active": false
+    },
+    {
+      "path": "/healthworker/profile/122323",
+      "title": "Account", 
+      "icon": "user", 
+      "type": "link",  
+      "active": false
+    },
+
+    {
+      "headTitle1": "Health Workers",
+      "headTitle2": "All Health Workers related actions",
+      "type": "headtitle"
+    },
+    {
+      "title": "Health Workers",
+      "icon": "airplay",
+      "type": "sub",
+      "active": false,
+      "children": [
+        {
+          "path": "/healthworkers",
+          "title": "All Health Workers",
+          "type": "link"
+        },
+        {
+          "path": "/healthworker/register",
+          "title": "Add Healthworker",
+          "type": "link"
+        }
+      ]
+    },
+
+    {
+      "headTitle1": "Patients Module",
+      "headTitle2": "Patients module and filters",
+      "type": "headtitle"
+    },
+    {
+      "title": "Patients",
+      "icon": "airplay",
+      "type": "sub",
+      "active": false,
+      "children": [
+        {
+          "path": "/project/projectlist",
+          "title": "All Patients Encounter",
+          "type": "link"
+        },
+        {
+          "path": "/patients",
+          "title": "All Patients / Filter",
+          "type": "link"
+        },
+        {
+          "path": "/patient/register",
+          "title": "Add Patient",
+          "type": "link"
+        }
+      ]
+    },
+
+    {
+      "headTitle1": "Chats",
+      "headTitle2": "All your chats messages",
+      "type": "headtitle"
+    },
+    {
+      "path": "/chats",
+      "title": "Chats", 
+      "icon": "mail", 
+      "type": "link",  
+      "active": false
+    }
+
+  ]
+}
