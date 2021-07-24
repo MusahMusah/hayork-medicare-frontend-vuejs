@@ -22,6 +22,8 @@ Vue.component(PxCard.name, PxCard)
 // Import Theme scss
 import './assets/scss/app.scss'
 
+// Import Components Bootstrap
+import './utils/components-bootstrap'
 
 Vue.use(VueFeather);
 Vue.use(BootstrapVue)

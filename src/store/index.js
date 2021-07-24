@@ -5,6 +5,7 @@ import layout from './modules/layout'
 import menu from './modules/menu'
 import products from './modules/products'
 import chat from './modules/chat'
+import auth from './modules/auth'
 Vue.use(Vuex);
 
 export const store = new Vuex.Store({
@@ -18,7 +19,8 @@ export const store = new Vuex.Store({
       layout,
       menu,
       products,
-      chat
+      chat,
+      auth
     }
 });
 
