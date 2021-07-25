@@ -7,6 +7,7 @@ import products from './modules/products'
 import chat from './modules/chat'
 import * as auth from "@/store/modules/auth";
 import healthworkers from './modules/healthworkers'
+import patients from './modules/patients'
 
 Vue.use(Vuex);
 export default new Vuex.Store({
@@ -17,7 +18,8 @@ export default new Vuex.Store({
     products,
     chat,
     auth,
-    healthworkers
+    healthworkers,
+    patients
   }
 });
 // export const store = new Vuex.Store({

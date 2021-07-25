@@ -157,24 +157,16 @@
                   ? 'col-xl-12'
                   : 'col-xl-3 col-md-6',
               ]"
-              v-for="(product, index) in filterProduct"
+              v-for="(product, index) in resultQuery"
               :key="index"
             >
               <div class="card custom-card">
-                <!-- <div class="card-header">
-                  <img
-                    class="img-fluid"
-                    src="../../assets/images/user-card/7.jpg"
-                    alt=""
-                  />
-                </div> -->
                 <div class="card-profile">
                   <img
                     class="rounded-circle"
                     src="../../assets/images/avatar.png"
                     alt=""
                   />
-                    <!-- src="../../assets/images/avtar/16.jpg" -->
                 </div>
                 <div class="mt-1 text-center profile-details">
                   <h4>Johan Deo</h4>
@@ -288,8 +280,9 @@
   </div>
 </template>
   <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions, mapState } from "vuex";
 import Slider from "@/components/ui/filterbar";
+
 export default {
   name: "Product",
   components: {
@@ -317,8 +310,34 @@ export default {
       filterProduct: "products/filterProducts",
       tags: "products/setTags",
     }),
+    ...mapState({
+      getPatients: (state) => state.patients.patients,
+    }),
+    resultQuery() {
+      if (this.searchQuery) {
+        const result = this.getPatients.filter(
+          (item) =>
+            item.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+            item.ward
+              .toLowerCase()
+              .includes(this.searchQuery.toLowerCase()) ||
+            item.state.toLowerCase().includes(this.searchQuery.toLowerCase())
+        );
+        if (result.length > 0) {
+          return result;
+        }
+        return [];
+      }
+      return this.getPatients;
+    },
+  },
+  created() {
+    this.getAllPatients();
   },
   methods: {
+    ...mapActions({
+      getAllPatients: "patients/getAllPatients",
+    }),
     //For getting image path
     getImgUrl(path) {
       return require("@/assets/images/" + path);

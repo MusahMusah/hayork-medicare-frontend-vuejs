@@ -1,7 +1,7 @@
-import HealthWorkerService from "@/services/HealthWorkerService";
+import PatientsService from "@/services/PatientsService";
 
 const state = {
-    healthWorkers: [],
+    patients: [],
     singleWorker: [],
 }
 
@@ -11,8 +11,8 @@ const getters = {
 
 // mutations
 const mutations = {
-    SET_GET_HEALTHWORKERS(state, data) {
-        return state.healthWorkers = data
+    SET_GET_ALL_PATIENTS(state, data) {
+        return state.patients = data
     },
     SET_SINGLE_WORKER(state, data) {
         return state.singleWorker = data
@@ -21,16 +21,16 @@ const mutations = {
 
 // actions
 const actions = {
-    async registerHealthWorker(_, payload) {
-       const res = HealthWorkerService.registerHealthWorker(payload)
+    async registerPatient(_, payload) {
+       const res = PatientsService.registerPatient(payload)
        return res
     },
-    async getHealthWorkers({ commit }) {
-        const res = await HealthWorkerService.getHealthWorkers()
-        commit('SET_GET_HEALTHWORKERS', res.data.data)
+    async getAllPatients({ commit }) {
+        const res = await PatientsService.getAllPatients()
+        commit('SET_GET_ALL_PATIENTS', res.data.data)
     },
     async getSingleWorker({ commit }, payload) {
-        const res = await HealthWorkerService.getSingleWorker(payload)
+        const res = await PatientsService.getSingleWorker(payload)
         commit('SET_SINGLE_WORKER', res.data.data)
         return res
     }

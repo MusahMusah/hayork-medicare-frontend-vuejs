@@ -91,7 +91,7 @@
                                     :class="
                                       errors.length > 0 ? 'is-invalid' : null
                                     "
-                                    type="text"
+                                    type="number"
                                     placeholder="Age"
                                   />
                                   <small class="text-danger">{{
@@ -144,7 +144,7 @@
                                     :class="
                                       errors.length > 0 ? 'is-invalid' : null
                                     "
-                                    type="text"
+                                    type="number"
                                     placeholder="Weight"
                                   />
                                   <small class="text-danger">{{
@@ -168,7 +168,7 @@
                                       errors.length > 0 ? 'is-invalid' : null
                                     "
                                     class="form-control"
-                                    type="text"
+                                    type="number"
                                     placeholder="Height"
                                   />
                                   <small class="text-danger">{{
@@ -224,7 +224,7 @@
                                 <div class="form-group">
                                   <label class="form-label">LGA</label>
                                   <input
-                                    v-model="form.ward"
+                                    v-model="form.lga"
                                     class="form-control"
                                     :state="errors.length > 0 ? false : null"
                                     :class="
@@ -264,30 +264,18 @@
                               </validation-provider>
                             </div>
                             <div class="col-md-12">
-                               <validation-provider
-                                #default="{ errors }"
-                                name="Picture"
-                                rules="required"
-                              >
                               <div class="form-group row">
                                 <label class="col-sm-3 col-form-label"
                                   >Upload File</label
                                 >
                                 <div class="col-sm-9">
                                   <b-form-file
-                                  :state="errors.length > 0 ? false : null"
-                                    :class="
-                                      errors.length > 0 ? 'is-invalid' : null
-                                    "
+                                    @change="handleFile"
                                     class="form-control"
                                     plain
                                   ></b-form-file>
-                                   <small class="text-danger">{{
-                                    errors[0]
-                                  }}</small>
                                 </div>
                               </div>
-                               </validation-provider>
                             </div>
                           </div>
                         </div>
@@ -382,14 +370,19 @@ export default {
         surname: "",
         gender: null,
         age: "",
-        cadre: "",
+        height: "",
         Weight: "",
         email: "",
         password: "",
+        bmi: "",
+        ward: "",
+        lga: "",
+        state: "",
+        image: "",
       },
       options: [
-        { name: "Male", language: "JavaScript" },
-        { name: "Female", language: "Ruby" },
+        { name: "Male", value: "Male" },
+        { name: "Female", value: "Female" },
       ],
     };
   },
@@ -402,15 +395,16 @@ export default {
   },
   methods: {
     ...mapActions({
-      registerPatient: 'patients/registerPatient'
+      registerPatient: 'patients/registerPatient',
+      getAllPatients: 'patients/getAllPatients'
     }),
     handleSubmit() {
       this.form.gender = this.form.gender.value;
       this.registerPatient(this.transformToFormData(this.form)).then(
         (res) => {
           if (res.status === 200 || res.status === 201) {
-            this.$router.replace({ name: "healthworkers" }).then(() => {
-              this.getAllHealthWorkers()
+            this.$router.replace({ name: "patients" }).then(() => {
+              this.getAllPatients()
               this.$vToastify.success("👋 Record Added successfully!");
             });
           } else {
