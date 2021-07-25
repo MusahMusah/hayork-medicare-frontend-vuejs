@@ -1,8 +1,12 @@
 import Vue from 'vue'
 import Router from "vue-router";
-
+// import store from "@/store";
+import store from '../store';
+import auth from "@/middleware/auth";
+import healthworker from "@/middleware/healthworker";
+import guest from "@/middleware/guest";
+import middlewarePipeline from "@/router/middlewarePipeline";
 import Body from '../components/body'
-
 import SamplePage from '../pages/sample_page'
 
 // component
@@ -21,6 +25,7 @@ const routes = [
         name: 'dashboard',
         component: SamplePage,
         meta: {
+          middleware: [auth, healthworker],
           title: 'Default Dashboard | Endless - Premium Admin Template',
         }
       },
@@ -103,7 +108,8 @@ const routes = [
     name:'auth-login',
     component: () => import('@/pages/auth/login.vue'),
     meta: {
-        title: 'Error404 | Cuba - Premium Admin Template',
+      middleware: [guest],
+      title: 'Error404 | Cuba - Premium Admin Template',
     }
   },
 
@@ -113,7 +119,7 @@ const routes = [
     name:'Error404',
     component: () => import('@/pages/errors/error_404.vue'),
     meta: {
-        title: 'Error404 | Cuba - Premium Admin Template',
+      title: 'Error404 | Cuba - Premium Admin Template',
     }
   },
 ];
@@ -127,5 +133,20 @@ const router = new Router({
     return { x: 0, y: 0 }
   }
 });
+
+router.beforeEach((to, from, next) => {
+  const middleware = to.meta.middleware;
+  const context = { to, from, next, store };
+
+  if (!middleware) {
+    return next();
+  }
+
+  middleware[0]({
+    ...context,
+    next: middlewarePipeline(context, middleware, 1),
+  });
+});
+
 
 export default router

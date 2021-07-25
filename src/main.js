@@ -4,7 +4,8 @@ import axios from 'axios'
 import BootstrapVue from 'bootstrap-vue'
 import router from './router'
 import Breadcrumbs from './components/bread_crumbs'
-import { store } from './store';
+// import { store } from './store';
+import store from './store';
 import VueFeather from 'vue-feather';
 import { ValidationObserver, ValidationProvider } from 'vee-validate'
 Vue.component('ValidationProvider', ValidationProvider);
@@ -42,9 +43,6 @@ Vue.component('Breadcrumbs', Breadcrumbs)
 new Vue({
   router,
   store,
-  data: {
-    required
-  },
   created() {
     axios.interceptors.response.use(
       response => response,

@@ -34,6 +34,12 @@ export const actions = {
             if (router.currentRoute.name !== "login")
             router.push({ path: "/login" });
         })
+        .catch(() => {
+            commit("SET_USER", null);
+            dispatch("setGuest", { value: "isGuest" });
+            if (router.currentRoute.name !== "login")
+            router.push({ path: "/login" });
+        })
     },
     async getAuthUser({ commit, dispatch }) {
         try {
@@ -56,8 +62,8 @@ export const getters = {
   authUser: (state) => {
     return state.user;
   },
-  isAdmin: (state) => {
-    return state.user ? state.user.isAdmin : false;
+  isHealthWorker: (state) => {
+    return state.user ? state.user.is_health_worker : false;
   },
   error: (state) => {
     return state.error;

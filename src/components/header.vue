@@ -250,6 +250,12 @@ export default {
     }),
     logOutUser() {
       this.logOut()
+        // .then(() => {
+        //   this.$router.replace({ name: 'auth-login' })
+        // })
+        // .catch(() => {
+        //   this.$router.replace({ name: 'auth-login' })
+        // })
     },
     toggle_sidebar() {
       this.$store.dispatch("menu/opensidebar");

@@ -9,19 +9,30 @@ import chat from './modules/chat'
 import * as auth from "@/store/modules/auth";
 Vue.use(Vuex);
 
-export const store = new Vuex.Store({
-    state: {
-    },
-    mutations: {
-    },
-    actions: {
-    },
-    modules: {
-      layout,
-      menu,
-      products,
-      chat,
-      auth
-    }
+
+export default new Vuex.Store({
+  strict: true,
+  modules: {
+    layout,
+    menu,
+    products,
+    chat,
+    auth
+  }
 });
+// export const store = new Vuex.Store({
+//     state: {
+//     },
+//     mutations: {
+//     },
+//     actions: {
+//     },
+//     modules: {
+//       layout,
+//       menu,
+//       products,
+//       chat,
+//       auth
+//     }
+// });
 
