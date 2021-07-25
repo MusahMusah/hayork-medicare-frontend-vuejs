@@ -9,4 +9,8 @@ export default {
     const res = await apiClient.get("/healthworker")
     return res
   },
+  async getSingleWorker(payload) {
+    const res = await apiClient.get(`/healthworker/${payload}`)
+    return res
+  },
 };

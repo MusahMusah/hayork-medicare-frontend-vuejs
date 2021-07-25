@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Breadcrumbs main="Users" title="Edit Profile" />
+    <Breadcrumbs main="" title="Add HealthWorker" />
     <div class="container-fluid">
       <div class="row">
         <div class="col-sm-12">
