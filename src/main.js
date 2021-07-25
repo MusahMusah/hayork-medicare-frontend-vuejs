@@ -43,6 +43,9 @@ Vue.component('Breadcrumbs', Breadcrumbs)
 new Vue({
   router,
   store,
+  data: {
+    required
+  },
   created() {
     axios.interceptors.response.use(
       response => response,

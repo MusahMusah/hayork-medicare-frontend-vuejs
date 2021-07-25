@@ -152,7 +152,7 @@
               alt=""
             />
             <div class="media-body">
-              <span>Emay Walter</span>
+              <span>{{activeUser.name}}</span>
               <p class="mb-0 font-roboto">
                 Admin <i class="middle fa fa-angle-down"></i>
               </p>
@@ -242,6 +242,7 @@ export default {
     ...mapState({
       menuItems: (state) => state.menu.searchData,
       megamenuItems: (state) => state.menu.megamenu,
+      activeUser: (state) => state.auth.user,
     }),
   },
   methods: {
