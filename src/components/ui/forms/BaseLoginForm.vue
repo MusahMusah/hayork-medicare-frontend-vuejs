@@ -63,16 +63,24 @@ export default {
         if (success) {
           this.login(this.form)
             .then(() => {
-                this.$router
-                .replace({ name: "dashboard" })
-                .then(() => {
-                  this.$vToastify.success("👋 You have successfully logged in. Now you can start to explore!", 
+              this.$router.replace({ name: "dashboard" }).then(() => {
+                this.$vToastify.success(
+                  "👋 You have successfully logged in. Now you can start to explore!",
                   `Welcome ${this.$store.state.auth.user.name}`
-                  ); 
-                })
+                );
+              });
             })
             .catch((e) => {
-              console.log(e.response.data);
+              console.log(e.response.data.errors)
+              if (e.response.status === 422) {
+                Object.entries(e.response.data.errors.email).forEach(
+                  ([, value]) => {
+                    this.$vToastify.error(value)
+                  }
+                );
+              } else if(e.response) {
+                this.$vToastify.error(e.response.data.message)
+              }
             });
         }
       });
