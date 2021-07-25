@@ -63,17 +63,16 @@ export default {
         if (success) {
           this.login(this.form)
             .then(() => {
-              // this.$router
-              //   .replace({ name: "dashboard" })
-              //   .then(() => {
-
-              //   })
-              //   .catch(() => {
-                  
-              //   })
+                this.$router
+                .replace({ name: "dashboard" })
+                .then(() => {
+                  this.$vToastify.success("👋 You have successfully logged in. Now you can start to explore!", 
+                  `Welcome ${this.$store.state.auth.user.name}`
+                  ); 
+                })
             })
             .catch((e) => {
-              console.log(e);
+              console.log(e.response.data);
             });
         }
       });

@@ -22,13 +22,11 @@ export const mutations = {
 };
 
 export const actions = {
-    async login(_, payload) {
-        AuthService.login(payload)
-        .then(() => {
-            AuthService.me()
-        })
+    async login({ dispatch }, payload) {
+        await AuthService.login(payload)
+        return dispatch('getAuthUser')
     },
-    logout({ commit, dispatch }) {
+    logOut({ commit, dispatch }) {
         return AuthService.logout()
         .then(() => {
             commit("SET_USER", null);
@@ -37,19 +35,19 @@ export const actions = {
             router.push({ path: "/login" });
         })
     },
-    async getAuthUser({ commit }) {
-        commit("SET_LOADING", true);
+    async getAuthUser({ commit, dispatch }) {
         try {
-        const response = await AuthService.getAuthUser();
-        commit("SET_USER", response.data.data);
-        commit("SET_LOADING", false);
-        return response.data.data;
+            const response = await AuthService.getAuthUser();
+            if (response.status === 200) {
+                commit("SET_USER", response.data.data);
+                dispatch("setGuest", { value: "isNotGuest" });
+            }
         } catch (error) {
-        commit("SET_LOADING", false);
-        commit("SET_USER", null);
+            commit("SET_USER", null);
+            return error
         }
     },
-    setGuest(context, { value }) {
+    setGuest(_, { value }) {
         window.localStorage.setItem("guest", value);
     },
 };

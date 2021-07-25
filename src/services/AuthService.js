@@ -6,8 +6,8 @@ export default {
     await Csrf.getCookie();
     return apiClient.post("/login", payload);
   },
-  me() {
-    return apiClient.get("/users/me");
+  async getAuthUser() {
+    return await apiClient.get("/users/me");
   },
   logout() {
     return apiClient.post("/logout");
@@ -15,9 +15,6 @@ export default {
   async forgotPassword(payload) {
     await Csrf.getCookie();
     return apiClient.post("/forgot-password", payload);
-  },
-  getAuthUser() {
-    return apiClient.get("/api/users/auth");
   },
   async resetPassword(payload) {
     await Csrf.getCookie();

@@ -4,7 +4,7 @@
  */
 
 import axios from "axios";
-import store from "@/store";
+// import store from "@/store";
 import progressFns from "@/utils/helper.js";
 
 export const apiClient = axios.create({
@@ -40,14 +40,14 @@ apiClient.interceptors.response.use(
     return response;
   },
   function (error) {
-    if (
-      error.response &&
-      [401, 419].includes(error.response.status) &&
-      store.getters["auth/authUser"] &&
-      !store.getters["auth/guest"]
-    ) {
-      store.dispatch("auth/logout");
-    }
+    // if (
+    //   error.response &&
+    //   [401, 419].includes(error.response.status) &&
+    //   store.getters["auth/authUser"] &&
+    //   !store.getters["auth/guest"]
+    // ) {
+    //   store.dispatch("auth/logout");
+    // }
     progressStop();
     return Promise.reject(error);
   }

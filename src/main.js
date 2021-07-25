@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
+import axios from 'axios'
 import BootstrapVue from 'bootstrap-vue'
 import router from './router'
 import Breadcrumbs from './components/bread_crumbs'
@@ -18,6 +19,7 @@ Vue.use(VueToastify, {
   position: 'top-right',
   theme: 'light',
   orderLatest: 'true',
+  hideProgressbar: true
 })
 
 import SmartTable from 'vuejs-smart-table'
@@ -42,6 +44,17 @@ new Vue({
   store,
   data: {
     required
+  },
+  created() {
+    axios.interceptors.response.use(
+      response => response,
+      error => {
+        if(error.response.status === 401) {
+          this.$store.dispatch('auth/logOut')
+        }
+        return Promise.reject(error)
+      }
+    )
   },
   render: h => h(App)
 }).$mount('#app')

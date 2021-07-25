@@ -172,7 +172,7 @@
                 ><feather type="settings"></feather><span>Settings</span></a
               >
             </li> -->
-            <li>
+            <li @click="logOutUser">
               <a><feather type="log-in"></feather><span>Log out</span></a
               >
             </li>
@@ -217,7 +217,7 @@
 </template>
 <script>
 var body = document.getElementsByTagName("body")[0];
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 // import app from "../main";
 export default {
   name: "Search",
@@ -245,6 +245,12 @@ export default {
     }),
   },
   methods: {
+    ...mapActions({
+      logOut: 'auth/logOut'
+    }),
+    logOutUser() {
+      this.logOut()
+    },
     toggle_sidebar() {
       this.$store.dispatch("menu/opensidebar");
     },
@@ -277,15 +283,6 @@ export default {
     },
     mobileaccordian() {
       this.mobile_accordian = !this.mobile_accordian;
-    },
-    logout: function () {
-      firebase
-        .auth()
-        .signOut()
-        .then(() => {
-          UserAuth.Logout();
-          this.$router.replace("/auth/login");
-        });
     },
     addFix() {
       body.classList.add("offcanvas");
