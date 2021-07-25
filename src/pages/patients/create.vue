@@ -369,11 +369,12 @@
 </template>
 
 <script>
-import { ValidationProvider, ValidationObserver } from "vee-validate";
-import { required } from "@/utils/validations/validations.js";
+import { mapActions } from 'vuex'
+import formMixins from "../../mixins/form";
+
 export default {
   name: "CreateHealthWorker",
-  components: { ValidationProvider, ValidationObserver },
+  mixins: [formMixins],
   data() {
     return {
       form: {
@@ -390,7 +391,6 @@ export default {
         { name: "Male", language: "JavaScript" },
         { name: "Female", language: "Ruby" },
       ],
-      required,
     };
   },
   computed: {
@@ -401,8 +401,26 @@ export default {
     },
   },
   methods: {
+    ...mapActions({
+      registerPatient: 'patients/registerPatient'
+    }),
     handleSubmit() {
-      alert("submitted");
+      this.form.gender = this.form.gender.value;
+      this.registerPatient(this.transformToFormData(this.form)).then(
+        (res) => {
+          if (res.status === 200 || res.status === 201) {
+            this.$router.replace({ name: "healthworkers" }).then(() => {
+              this.getAllHealthWorkers()
+              this.$vToastify.success("👋 Record Added successfully!");
+            });
+          } else {
+            this.$vToastify.error("Error Occured");
+          }
+        }
+      );
+    },
+    handleFile(e) {
+      this.form.image = e.target.files[0];
     },
     validatePersonalDetails() {
       return new Promise((resolve, reject) => {
