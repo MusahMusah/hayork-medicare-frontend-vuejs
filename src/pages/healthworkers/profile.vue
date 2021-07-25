@@ -38,9 +38,9 @@
                   <div class="col-sm-12 col-lg-4 order-sm-0 order-xl-1">
                     <div class="user-designation">
                       <div class="title">
-                        <a target="_blank" href="">Mark jecno</a>
+                        <a target="_blank" href="">{{singleWorker.name}}</a>
                       </div>
-                      <div class="mt-2 desc">designer</div>
+                      <div class="mt-2 desc">{{singleWorker.cadre}}</div>
                     </div>
                   </div>
                   <div class="col-sm-6 col-lg-4 order-sm-2 order-xl-2">
@@ -291,6 +291,7 @@
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex'
 import users from "@/data/users";
 export default {
   data() {
@@ -302,5 +303,24 @@ export default {
       },
     };
   },
+  computed: {
+    ...mapState({
+      singleWorker: state => state.healthworkers.singleWorker
+    }),
+  },
+  created() {
+    this.validateHealthworker()
+  },
+  methods: {
+    ...mapActions({
+      getSingleWorker: 'healthworkers/getSingleWorker'
+    }),
+    validateHealthworker() {
+      this.getSingleWorker(this.$route.params.id)
+        .then((res) => {
+          console.log(res)
+        })
+    },
+  }
 };
 </script>

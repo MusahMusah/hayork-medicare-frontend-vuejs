@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Breadcrumbs main="Users" title="Edit Profile" />
+    <Breadcrumbs main="" title="Add HealthWorker" />
     <div class="container-fluid">
       <div class="row">
         <div class="col-sm-12">
@@ -180,7 +180,7 @@
                             <div class="col-md-12">
                               <div class="form-group row">
                                 <label class="col-sm-3 col-form-label"
-                                  >Upload File {{form.image}}</label
+                                  >Upload File {{ form.image }}</label
                                 >
                                 <div class="col-sm-9">
                                   <b-form-file
@@ -283,7 +283,7 @@ export default {
         department: "",
         email: "",
         password: "",
-        image: ''
+        image: "",
       },
       options: [
         { name: "Male", value: "Male" },
@@ -295,20 +295,25 @@ export default {
   methods: {
     ...mapActions({
       registerHealthWorker: "healthworkers/registerHealthWorker",
+      getAllHealthWorkers : 'healthworkers/getHealthWorkers',
     }),
     handleSubmit() {
       this.form.gender = this.form.gender.value;
-      this.registerHealthWorker(this.transformToFormData(this.form)).then((res) => {
-        if (res.status === 200 || res.status === 201) {
-          this.$vToastify.success("Record Added successfully!");
-          this.resetFormFields(this.form);
-        } else {
-          this.$vToastify.error("Error Occured");
+      this.registerHealthWorker(this.transformToFormData(this.form)).then(
+        (res) => {
+          if (res.status === 200 || res.status === 201) {
+            this.$router.replace({ name: "healthworkers" }).then(() => {
+              this.getAllHealthWorkers()
+              this.$vToastify.success("👋 Record Added successfully!");
+            });
+          } else {
+            this.$vToastify.error("Error Occured");
+          }
         }
-      });
+      );
     },
     handleFile(e) {
-      this.form.image = e.target.files[0]
+      this.form.image = e.target.files[0];
     },
     validatePersonalDetails() {
       return new Promise((resolve, reject) => {
