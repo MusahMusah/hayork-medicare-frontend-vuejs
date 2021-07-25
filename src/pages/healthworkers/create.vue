@@ -177,6 +177,20 @@
                                 }}</small>
                               </validation-provider>
                             </div>
+                            <div class="col-md-12">
+                              <div class="form-group row">
+                                <label class="col-sm-3 col-form-label"
+                                  >Upload File {{form.image}}</label
+                                >
+                                <div class="col-sm-9">
+                                  <b-form-file
+                                    @change="handleFile"
+                                    class="form-control"
+                                    plain
+                                  ></b-form-file>
+                                </div>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -253,11 +267,11 @@
 </template>
 
 <script>
-import { ValidationProvider, ValidationObserver } from "vee-validate";
-import { required } from "@/utils/validations/validations.js";
+import { mapActions } from "vuex";
+import formMixins from "../../mixins/form";
+
 export default {
   name: "CreateHealthWorker",
-  components: { ValidationProvider, ValidationObserver },
   data() {
     return {
       form: {
@@ -269,17 +283,32 @@ export default {
         department: "",
         email: "",
         password: "",
+        image: ''
       },
       options: [
-        { name: "Male", language: "JavaScript" },
-        { name: "Female", language: "Ruby" },
+        { name: "Male", value: "Male" },
+        { name: "Female", value: "Female" },
       ],
-      required,
     };
   },
+  mixins: [formMixins],
   methods: {
+    ...mapActions({
+      registerHealthWorker: "healthworkers/registerHealthWorker",
+    }),
     handleSubmit() {
-      alert("submitted");
+      this.form.gender = this.form.gender.value;
+      this.registerHealthWorker(this.transformToFormData(this.form)).then((res) => {
+        if (res.status === 200 || res.status === 201) {
+          this.$vToastify.success("Record Added successfully!");
+          this.resetFormFields(this.form);
+        } else {
+          this.$vToastify.error("Error Occured");
+        }
+      });
+    },
+    handleFile(e) {
+      this.form.image = e.target.files[0]
     },
     validatePersonalDetails() {
       return new Promise((resolve, reject) => {

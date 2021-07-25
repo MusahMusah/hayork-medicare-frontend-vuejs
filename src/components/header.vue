@@ -152,7 +152,7 @@
               alt=""
             />
             <div class="media-body">
-              <span>Emay Walter</span>
+              <span>{{activeUser.name}}</span>
               <p class="mb-0 font-roboto">
                 Admin <i class="middle fa fa-angle-down"></i>
               </p>
@@ -172,7 +172,7 @@
                 ><feather type="settings"></feather><span>Settings</span></a
               >
             </li> -->
-            <li>
+            <li @click="logOutUser">
               <a><feather type="log-in"></feather><span>Log out</span></a
               >
             </li>
@@ -217,7 +217,7 @@
 </template>
 <script>
 var body = document.getElementsByTagName("body")[0];
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 // import app from "../main";
 export default {
   name: "Search",
@@ -242,9 +242,22 @@ export default {
     ...mapState({
       menuItems: (state) => state.menu.searchData,
       megamenuItems: (state) => state.menu.megamenu,
+      activeUser: (state) => state.auth.user,
     }),
   },
   methods: {
+    ...mapActions({
+      logOut: 'auth/logOut'
+    }),
+    logOutUser() {
+      this.logOut()
+        // .then(() => {
+        //   this.$router.replace({ name: 'auth-login' })
+        // })
+        // .catch(() => {
+        //   this.$router.replace({ name: 'auth-login' })
+        // })
+    },
     toggle_sidebar() {
       this.$store.dispatch("menu/opensidebar");
     },
@@ -277,15 +290,6 @@ export default {
     },
     mobileaccordian() {
       this.mobile_accordian = !this.mobile_accordian;
-    },
-    logout: function () {
-      firebase
-        .auth()
-        .signOut()
-        .then(() => {
-          UserAuth.Logout();
-          this.$router.replace("/auth/login");
-        });
     },
     addFix() {
       body.classList.add("offcanvas");

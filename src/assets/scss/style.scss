@@ -150,3 +150,14 @@
 @import "layout/sidebar.scss";
 @import "layout/rtl.scss";
 @import "layout/box-layout.scss";
+
+.vt-notification>.vt-content>.vt-title {
+    font-size: 1.2em;
+}
+.vt-notification>.vt-content>.vt-paragraph {
+    font-size: 1em;
+}
+.vt-notification>.vt-icon-container {
+    width: 40px !important;
+    height: 40px !important;
+}
