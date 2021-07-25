@@ -8,10 +8,18 @@ import VueFeather from 'vue-feather';
 import { ValidationObserver, ValidationProvider } from 'vee-validate'
 Vue.component('ValidationProvider', ValidationProvider);
 Vue.component('ValidationObserver', ValidationObserver);
+import { required } from "@/utils/validations/validations.js";
 import VueFormWizard from 'vue-form-wizard';
 Vue.use(VueFormWizard)
 import Multiselect from 'vue-multiselect'
 Vue.component('multiselect', Multiselect)
+import VueToastify from "vue-toastify";
+Vue.use(VueToastify, {
+  position: 'top-right',
+  theme: 'light',
+  orderLatest: 'true',
+})
+
 import SmartTable from 'vuejs-smart-table'
 Vue.use(SmartTable)
 import VueApexCharts from 'vue-apexcharts';
@@ -32,5 +40,8 @@ Vue.component('Breadcrumbs', Breadcrumbs)
 new Vue({
   router,
   store,
+  data: {
+    required
+  },
   render: h => h(App)
 }).$mount('#app')

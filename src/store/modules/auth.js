@@ -22,30 +22,36 @@ export const mutations = {
 };
 
 export const actions = {
-  logout({ commit, dispatch }) {
-    return AuthService.logout()
-      .then(() => {
+    async login(_, payload) {
+        AuthService.login(payload)
+        .then(() => {
+            AuthService.me()
+        })
+    },
+    logout({ commit, dispatch }) {
+        return AuthService.logout()
+        .then(() => {
+            commit("SET_USER", null);
+            dispatch("setGuest", { value: "isGuest" });
+            if (router.currentRoute.name !== "login")
+            router.push({ path: "/login" });
+        })
+    },
+    async getAuthUser({ commit }) {
+        commit("SET_LOADING", true);
+        try {
+        const response = await AuthService.getAuthUser();
+        commit("SET_USER", response.data.data);
+        commit("SET_LOADING", false);
+        return response.data.data;
+        } catch (error) {
+        commit("SET_LOADING", false);
         commit("SET_USER", null);
-        dispatch("setGuest", { value: "isGuest" });
-        if (router.currentRoute.name !== "login")
-          router.push({ path: "/login" });
-      })
-  },
-  async getAuthUser({ commit }) {
-    commit("SET_LOADING", true);
-    try {
-      const response = await AuthService.getAuthUser();
-      commit("SET_USER", response.data.data);
-      commit("SET_LOADING", false);
-      return response.data.data;
-    } catch (error) {
-      commit("SET_LOADING", false);
-      commit("SET_USER", null);
-    }
-  },
-  setGuest(context, { value }) {
-    window.localStorage.setItem("guest", value);
-  },
+        }
+    },
+    setGuest(context, { value }) {
+        window.localStorage.setItem("guest", value);
+    },
 };
 
 export const getters = {

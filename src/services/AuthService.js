@@ -3,28 +3,31 @@ import Csrf from '../apis/Csrf'
 
 export default {
   async login(payload) {
-    await Csrf.get("/sanctum/csrf-cookie");
+    await Csrf.getCookie();
     return apiClient.post("/login", payload);
+  },
+  me() {
+    return apiClient.get("/users/me");
   },
   logout() {
     return apiClient.post("/logout");
   },
   async forgotPassword(payload) {
-    await Csrf.get("/sanctum/csrf-cookie");
+    await Csrf.getCookie();
     return apiClient.post("/forgot-password", payload);
   },
   getAuthUser() {
     return apiClient.get("/api/users/auth");
   },
   async resetPassword(payload) {
-    await Csrf.get("/sanctum/csrf-cookie");
+    await Csrf.getCookie();
     return apiClient.post("/reset-password", payload);
   },
   updatePassword(payload) {
     return apiClient.put("/user/password", payload);
   },
   async registerUser(payload) {
-    await Csrf.get("/sanctum/csrf-cookie");
+    await Csrf.getCookie();
     return apiClient.post("/register", payload);
   },
   sendVerification(payload) {

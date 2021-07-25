@@ -5,7 +5,8 @@ import layout from './modules/layout'
 import menu from './modules/menu'
 import products from './modules/products'
 import chat from './modules/chat'
-import auth from './modules/auth'
+// import auth from './modules/auth'
+import * as auth from "@/store/modules/auth";
 Vue.use(Vuex);
 
 export const store = new Vuex.Store({
