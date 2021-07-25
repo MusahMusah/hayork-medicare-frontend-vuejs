@@ -5,11 +5,10 @@ import layout from './modules/layout'
 import menu from './modules/menu'
 import products from './modules/products'
 import chat from './modules/chat'
-// import auth from './modules/auth'
 import * as auth from "@/store/modules/auth";
+import healthworkers from './modules/healthworkers'
+
 Vue.use(Vuex);
-
-
 export default new Vuex.Store({
   strict: true,
   modules: {
@@ -17,7 +16,8 @@ export default new Vuex.Store({
     menu,
     products,
     chat,
-    auth
+    auth,
+    healthworkers
   }
 });
 // export const store = new Vuex.Store({

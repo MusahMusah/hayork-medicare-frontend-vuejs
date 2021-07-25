@@ -28,7 +28,7 @@
                 @click="collapseFilter()"
               >
                 <h6 class="mb-0">
-                  Filters 
+                  Filters  
                   <span class="ml-2">
                     <feather type="chevron-down" class="middle"></feather>
                   </span>
@@ -95,7 +95,7 @@
           </div>
           <div class="row">
             <div class="mt-1 col-md-3 col-sm-12">
-                <button class="btn btn-pill btn-outline-primary-2x btn-air-primary"><i class="fa fa-plus-circle"></i> Add Doctor</button>
+                <button @click="() => $router.push({ name: 'register-healthworkers' })" class="btn btn-pill btn-outline-primary-2x btn-air-primary"><i class="fa fa-plus-circle"></i> Add Doctor</button>
             </div>
             <div class="col-md-9 col-sm-12">
               <form>
@@ -140,40 +140,34 @@
                   ? 'col-xl-12'
                   : 'col-xl-3 col-md-6',
               ]"
-              v-for="(product, index) in filterProduct"
+              v-for="(worker, index) in getHealthWorkers"
               :key="index"
             >
               <div class="card custom-card">
-                <!-- <div class="card-header">
-                  <img
-                    class="img-fluid"
-                    src="../../assets/images/user-card/7.jpg"
-                    alt=""
-                  />
-                </div> -->
                 <div class="card-profile">
                   <img
                     class="rounded-circle"
-                    src="../../assets/images/avatar.png"
+                    :src="worker.image"
                     alt=""
                   />
-                    <!-- src="../../assets/images/avtar/16.jpg" -->
                 </div>
                 <div class="mt-1 text-center profile-details">
-                  <h4>Johan Deo</h4>
+                  <h4>{{worker.name}}</h4>
                   <h6>Doctor</h6>
-                   <button @click="() => $router.push({ name: 'healthworker-profile', params: { id: 'sahjb2378237233'} })" class="mb-3 btn btn-squre btn-outline-primary-2x">
+                   <button @click="() => $router.push({ name: 'healthworker-profile', params: { id: worker.id} })" class="mb-3 btn btn-squre btn-outline-primary-2x">
                        View Profile
                    </button>
                 </div>
                 <div class="card-footer row">
                   <div class="col-6 col-sm-6">
                     <h6>Department</h6>
-                    <h3 class="counter">2578</h3>
+                    <h3 class="counter">
+                      {{worker.department}}
+                    </h3>
                   </div>
                   <div class="col-6 col-sm-6">
                     <h6>Age</h6>
-                    <h3><span class="counter">26</span>K</h3>
+                    <h3>{{worker.age}}</h3>
                   </div>
                 </div>
               </div>
@@ -270,13 +264,10 @@
   </div>
 </template>
   <script>
-import { mapGetters } from "vuex";
-import Slider from "@/components/ui/filterbar";
+import { mapGetters, mapState, mapActions } from "vuex";
+
 export default {
   name: "Product",
-  components: {
-    Slider,
-  },
   data() {
     return {
       modalShow: false,
@@ -299,8 +290,17 @@ export default {
       filterProduct: "products/filterProducts",
       tags: "products/setTags",
     }),
+    ...mapState({
+      getHealthWorkers: state => state.healthworkers.healthWorkers
+    })
+  },
+  created() {
+    this.getAllHealthWorkers()
   },
   methods: {
+    ...mapActions({
+      getAllHealthWorkers : 'healthworkers/getHealthWorkers',
+    }),
     //For getting image path
     getImgUrl(path) {
       return require("@/assets/images/" + path);

@@ -44,6 +44,7 @@ const routes = [
         name: 'healthworkers',
         component: () => import('@/pages/healthworkers/index.vue'),
         meta: {
+          middleware: [auth, healthworker],
           title: 'Default Dashboard | Endless - Premium Admin Template',
         }
       },
@@ -52,6 +53,7 @@ const routes = [
         name: 'register-healthworkers',
         component: () => import('@/pages/healthworkers/create.vue'),
         meta: {
+          middleware: [auth, healthworker],
           title: 'Default Dashboard | Endless - Premium Admin Template',
         }
       },
@@ -60,6 +62,7 @@ const routes = [
         name: 'healthworker-profile',
         component: () => import('@/pages/healthworkers/profile.vue'),
         meta: {
+          middleware: [auth, healthworker],
           title: 'Default Dashboard | Endless - Premium Admin Template',
         }
       },

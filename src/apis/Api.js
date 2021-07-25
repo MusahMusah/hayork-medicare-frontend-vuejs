@@ -8,7 +8,7 @@ import axios from "axios";
 import progressFns from "@/utils/helper.js";
 
 export const apiClient = axios.create({
-  baseURL: process.env.VUE_APP_API_URL + "/api",
+  baseURL: process.env.VUE_APP_API_URL,
   withCredentials: true, // required to handle the CSRF token
 });
 
