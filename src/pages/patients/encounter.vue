@@ -101,7 +101,7 @@
                           class="form-control"
                           :state="errors.length > 0 ? false : null"
                           :class="errors.length > 0 ? 'is-invalid' : null"
-                          type="text"
+                          type="number"
                           placeholder="Weight"
                         />
                         <small class="text-danger">{{ errors[0] }}</small>
@@ -121,7 +121,7 @@
                           :state="errors.length > 0 ? false : null"
                           :class="errors.length > 0 ? 'is-invalid' : null"
                           class="form-control"
-                          type="text"
+                          type="number"
                           placeholder="Height"
                         />
                         <small class="text-danger">{{ errors[0] }}</small>
@@ -190,7 +190,7 @@
                         <label class="form-label">Respiratory Rate (RR)</label>
                         <input
                           class="form-control"
-                          v-model="form.rr"
+                          v-model="form.respiratory_rate"
                           :state="errors.length > 0 ? false : null"
                           :class="errors.length > 0 ? 'is-invalid' : null"
                           type="text"
@@ -234,7 +234,7 @@
                       <div class="form-group">
                         <label class="form-label">Complain Box</label>
                         <textarea
-                          v-model="form.complain_box"
+                          v-model="form.complaints"
                           class="form-control"
                           :state="errors.length > 0 ? false : null"
                           :class="errors.length > 0 ? 'is-invalid' : null"
@@ -267,11 +267,9 @@
                   </div>
                   <div class="col-md-12">
                     <div>
-                      <label class="typo__label"
-                        >Share to another Doctor</label
-                      >
+                      <label class="typo__label">Share to another Doctor</label>
                       <multiselect
-                        v-model="imageValue"
+                        v-model="selectedDoctor"
                         placeholder="Pick a doctor to share with"
                         label="title"
                         track-by="title"
@@ -282,7 +280,8 @@
                         <template slot="singleLabel" slot-scope="props"
                           ><img
                             class="img-fluid img-100"
-                            :src="getImgUrl(props.option.img)"
+                            :src="props.option.img"
+                            style="width: 80px; height:60px; object-fit:contain"
                             alt="#"
                           />
                           <span class="option__desc"
@@ -294,7 +293,8 @@
                         <template slot="option" slot-scope="props"
                           ><img
                             class="img-fluid img-50"
-                            :src="getImgUrl(props.option.img)"
+                            :src="props.option.img"
+                            style="width: 80px; height:60px; object-fit:contain"
                             alt="#"
                           />
                           <div class="option__desc">
@@ -321,6 +321,7 @@
 </template>
 
 <script>
+import { mapActions, mapState } from "vuex";
 import { required } from "@/utils/validations/validations.js";
 import Datepicker from "vuejs-datepicker";
 
@@ -331,56 +332,92 @@ export default {
     return {
       format: "MM/dd/yyyy",
       form: {
-        name: "",
-        surname: "",
-        gender: null,
-        age: "",
-        cadre: "",
-        Weight: "",
-        email: "",
-        password: "",
+        date: '',
+        time: "",
+        visit_type: null,
+        weight: "",
+        bmi: "",
+        bp: "",
+        temp: "",
+        respiratory_rate: "",
+        diagnosis: "",
+        complaints: "",
+        treatment_plan: "",
       },
-      imageValue: null,
-      imageOptions: [
-        { title: 'Doctor 1', img: 'c1.jpg' },
-        { title: 'Doctor 2', img: 'c2.jpg' },
-        { title: 'Doctor 3', img: 'c3.jpg' },
-      ],
+      selectedDoctor: null,
+      imageOptions: [],
       options: [
-        { name: "Male", language: "JavaScript" },
-        { name: "Female", language: "Ruby" },
+        { name: "Male", value: "JavaScript" },
+        { name: "Female", value: "Ruby" },
       ],
       visitTypeOptions: [
-        { name: "First Time Visit", value: "First Time" },
-        { name: "Repeat Visit", language: "Repeat" },
+        { name: "First Time Visit", value: "first_time" },
+        { name: "Repeat Visit", value: "repeat" },
       ],
       diagnosisOptions: [
         { name: "Hypertension", value: "Hypertension" },
-        { name: "Pneumonia", language: "Pneumonia" },
-        { name: "Malaria", language: "Malaria" },
-        { name: "Diabetes", language: "Diabetes" },
+        { name: "Pneumonia", value: "Pneumonia" },
+        { name: "Malaria", value: "Malaria" },
+        { name: "Diabetes", value: "Diabetes" },
       ],
       required,
     };
   },
   computed: {
+    ...mapState({
+      fetchAllHealthWorkers: (state) => state.healthworkers.healthWorkers,
+    }),
     calculateBmi() {
       return this.form.weight && this.form.height
         ? this.form.weight / this.form.height
         : 0;
     },
   },
+  created() {
+    this.getHealthWorkers()
+    .then(() => {
+      this.healthWorkersList()
+    })
+  },
   methods: {
+    ...mapActions({
+      addEncounter: "patients/addEncounter",
+      getHealthWorkers: "healthworkers/getHealthWorkers",
+    }),
     handleForm() {
       this.$refs.encounterRef.validate().then((success) => {
         if (success) {
-          alert("all good");
+          this.form.diagnosis = this.form.diagnosis.value 
+          this.form.visit_type = this.form.visit_type.value 
+          this.form.healthworker = this.selectedDoctor.user_id
+          this.form.user_id = this.$route.params.id
+          this.form.bmi = this.calculateBmi
+          this.addEncounter(this.form).then((res) => {
+            console.log(res);
+            if (res.status === 200 || res.status === 201) {
+              this.$router.replace({ name: "patients" }).then(() => {
+                this.getAllPatients();
+                this.$vToastify.success("👋 Record Added successfully!");
+              });
+            } else {
+              this.$vToastify.error("Error Occured");
+            }
+          });
         }
       });
     },
     getImgUrl(path) {
       return require("@/assets/images/" + path);
-    }
+    },
+    healthWorkersList() {
+      this.fetchAllHealthWorkers.map((options) => {
+        this.imageOptions.push({
+          user_id: options.id,
+          title: options.name,
+          img: options.image
+        })
+      });
+    },
   },
 };
 </script>

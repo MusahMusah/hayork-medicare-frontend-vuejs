@@ -33,6 +33,10 @@ const actions = {
         const res = await PatientsService.getSinglePatient(payload)
         commit('SET_SINGLE_PATIENT', res.data.data)
         return res
+    },
+    addEncounter(_, payload) {
+        const res = PatientsService.addEncounter(payload)
+        return res
     }
 }
 
