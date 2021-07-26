@@ -26,7 +26,7 @@ const routes = [
         component: SamplePage,
         meta: {
           middleware: [auth, healthworker],
-          title: 'Default Dashboard | Endless - Premium Admin Template',
+          title: 'Page Title',
         }
       },
       {
@@ -34,7 +34,8 @@ const routes = [
         name: 'user-account',
         component: () => import('@/pages/account-settings/Profile.vue'),
         meta: {
-          title: 'Default Dashboard | Endless - Premium Admin Template',
+          middleware: [auth],
+          title: 'Page Title',
         }
       },
 
@@ -45,7 +46,7 @@ const routes = [
         component: () => import('@/pages/healthworkers/index.vue'),
         meta: {
           middleware: [auth, healthworker],
-          title: 'Default Dashboard | Endless - Premium Admin Template',
+          title: 'Page Title',
         }
       },
       {
@@ -54,7 +55,7 @@ const routes = [
         component: () => import('@/pages/healthworkers/create.vue'),
         meta: {
           middleware: [auth, healthworker],
-          title: 'Default Dashboard | Endless - Premium Admin Template',
+          title: 'Page Title',
         }
       },
       {
@@ -63,7 +64,7 @@ const routes = [
         component: () => import('@/pages/healthworkers/profile.vue'),
         meta: {
           middleware: [auth, healthworker],
-          title: 'Default Dashboard | Endless - Premium Admin Template',
+          title: 'Page Title',
         }
       },
 
@@ -73,7 +74,8 @@ const routes = [
         name: 'patients',
         component: () => import('@/pages/patients/index.vue'),
         meta: {
-          title: 'Default Dashboard | Endless - Premium Admin Template',
+          middleware: [auth],
+          title: 'Page Title',
         }
       },
       {
@@ -81,15 +83,17 @@ const routes = [
         name: 'register-patients',
         component: () => import('@/pages/patients/create.vue'),
         meta: {
-          title: 'Default Dashboard | Endless - Premium Admin Template',
+          middleware: [auth],
+          title: 'Page Title',
         }
       },
       {
-        path: '/patient/encounter',
+        path: '/patient/encounter/:id',
         name: 'patient-encounter',
         component: () => import('@/pages/patients/encounter.vue'),
         meta: {
-          title: 'Default Dashboard | Endless - Premium Admin Template',
+          middleware: [auth],
+          title: 'Page Title',
         }
       },
 
@@ -99,7 +103,7 @@ const routes = [
         name: 'chats',
         component: () => import('@/pages/chats/index.vue'),
         meta: {
-          title: 'Default Dashboard | Endless - Premium Admin Template',
+          title: 'Page Title',
         }
       },
     ]
@@ -112,7 +116,7 @@ const routes = [
     component: () => import('@/pages/auth/login.vue'),
     meta: {
       middleware: [guest],
-      title: 'Error404 | Cuba - Premium Admin Template',
+      title: 'Login Auth Page',
     }
   },
 
@@ -122,7 +126,7 @@ const routes = [
     name:'Error404',
     component: () => import('@/pages/errors/error_404.vue'),
     meta: {
-      title: 'Error404 | Cuba - Premium Admin Template',
+      title: 'Error404',
     }
   },
 ];

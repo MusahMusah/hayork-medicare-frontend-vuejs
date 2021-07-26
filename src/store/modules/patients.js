@@ -2,7 +2,7 @@ import PatientsService from "@/services/PatientsService";
 
 const state = {
     patients: [],
-    singleWorker: [],
+    singlePatient: [],
 }
 
 // getters
@@ -14,8 +14,8 @@ const mutations = {
     SET_GET_ALL_PATIENTS(state, data) {
         return state.patients = data
     },
-    SET_SINGLE_WORKER(state, data) {
-        return state.singleWorker = data
+    SET_SINGLE_PATIENT(state, data) {
+        return state.singlePatient = data
     },
 };
 
@@ -25,13 +25,13 @@ const actions = {
        const res = PatientsService.registerPatient(payload)
        return res
     },
-    async getAllPatients({ commit }) {
-        const res = await PatientsService.getAllPatients()
+    async getAllPatients({ commit }, payload) {
+        const res = await PatientsService.getAllPatients(payload)
         commit('SET_GET_ALL_PATIENTS', res.data.data)
     },
-    async getSingleWorker({ commit }, payload) {
-        const res = await PatientsService.getSingleWorker(payload)
-        commit('SET_SINGLE_WORKER', res.data.data)
+    async getSinglePatient({ commit }, payload) {
+        const res = await PatientsService.getSinglePatient(payload)
+        commit('SET_SINGLE_PATIENT', res.data.data)
         return res
     }
 }

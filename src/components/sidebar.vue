@@ -2,14 +2,7 @@
   <div>
       <div class="logo-wrapper">
         <router-link to="/">
-          <img
-            class="img-fluid for-light"
-            src="../assets/images/logo/logo.png"
-            alt="" /><img
-            class="img-fluid for-dark"
-            src="../assets/images/logo/logo_dark.png"
-            alt=""
-        />
+         <h5>Hayork Medicare</h5>
         </router-link>
         <div class="back-btn"  @click="toggle_sidebar"><i class="fa fa-angle-left"></i></div>
         <div class="toggle-sidebar" @click="toggle_sidebar">

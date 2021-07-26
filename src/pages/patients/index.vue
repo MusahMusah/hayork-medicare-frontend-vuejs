@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Breadcrumbs main="Ecommerce" title="Product" />
+    <Breadcrumbs main="" title="All Patients" />
     <!-- Container-fluid starts-->
     <div
       :class="
@@ -35,45 +35,12 @@
                 </h6>
               </span>
               <div class="grid-options d-inline-block">
-                <ul>
-                  <li @click="grid2()">
-                    <a class="product-2-layout-view">
-                      <span class="line-grid line-grid-1 bg-primary"></span>
-                      <span class="line-grid line-grid-2 bg-primary"></span>
-                    </a>
-                  </li>
-                  <li @click="grid3()">
-                    <a href="#" class="product-3-layout-view">
-                      <span class="line-grid line-grid-3 bg-primary"></span>
-                      <span class="line-grid line-grid-4 bg-primary"></span>
-                      <span class="line-grid line-grid-5 bg-primary"></span>
-                    </a>
-                  </li>
-                  <li @click="grid4()">
-                    <a href="#" class="product-4-layout-view">
-                      <span class="line-grid line-grid-6 bg-primary"></span>
-                      <span class="line-grid line-grid-7 bg-primary"></span>
-                      <span class="line-grid line-grid-8 bg-primary"></span>
-                      <span class="line-grid line-grid-9 bg-primary"></span>
-                    </a>
-                  </li>
-                  <li @click="grid6()">
-                    <a href="#" class="product-6-layout-view">
-                      <span class="line-grid line-grid-10 bg-primary"></span>
-                      <span class="line-grid line-grid-11 bg-primary"></span>
-                      <span class="line-grid line-grid-12 bg-primary"></span>
-                      <span class="line-grid line-grid-13 bg-primary"></span>
-                      <span class="line-grid line-grid-14 bg-primary"></span>
-                      <span class="line-grid line-grid-15 bg-primary"></span>
-                    </a>
-                  </li>
-                </ul>
               </div>
             </div>
             <div class="col-md-6">
               <div class="text-right pull-right">
                 <span class="mr-2 f-w-600"
-                  >Showing Products 1 - {{ filterProduct.length }} Results</span
+                  >Showing {{ resultQuery.length }} Results</span
                 >
                 <div
                   class="select2-drpdwn-product select-options d-inline-block"
@@ -81,13 +48,10 @@
                   <select
                     class="form-control btn-square"
                     name="select"
-                    @change="onChangeSort($event)"
+                    @change="filterQueryBy($event)"
                   >
-                    <option>Order Product By</option>
-                    <option value="a-z">Alphabetically, A-Z</option>
-                    <option value="z-a">Alphabetically, Z-A</option>
-                    <option value="low">price, low to high</option>
-                    <option value="high">price, high to low</option>
+                    <option value="asc">Alphabetically, A-Z</option>
+                    <option value="desc">Alphabetically, Z-A</option>
                   </select>
                 </div>
               </div>
@@ -107,6 +71,7 @@
                       </h6>
                     </div>
                     <Slider
+                      @appliedWrapperFilter="filterData"
                       @allFilters="allfilter"
                       @priceVal="pricefilterArray"
                     />
@@ -127,7 +92,7 @@
                 </div>
               </form>
               <div class="col-sm-12">
-                <div v-if="filterProduct.length == 0">
+                <div v-if="resultQuery.length == 0">
                   <div class="text-center search-not-found">
                     <!-- <img src="@/assets/images/empty-search.jpg" alt class="second-search" /> -->
                     <p>
@@ -166,12 +131,12 @@
                   <img
                     class="rounded-circle"
                     :src="patient.image"
-                    style="height: 101px; width:101px; object-fit:cover"
+                    style="height: 101px; width: 101px; object-fit: cover"
                     alt=""
                   />
                 </div>
                 <div class="mt-1 text-center profile-details">
-                  <h4>{{patient.name}}</h4>
+                  <h4>{{ patient.name }}</h4>
                   <h6>Patient</h6>
                   <button
                     @click="
@@ -190,14 +155,12 @@
                   <div class="col-6 col-sm-6">
                     <h6>Gender</h6>
                     <h3 class="counter">
-                      {{patient.gender}}
+                      {{ patient.gender }}
                     </h3>
                   </div>
                   <div class="col-6 col-sm-6">
                     <h6>Age</h6>
-                    <h3>
-                      {{patient.age}} years
-                    </h3>
+                    <h3>{{ patient.age }} years</h3>
                   </div>
                   <!-- <div class="col-4 col-sm-4">
                     <h6>Gender</h6>
@@ -210,24 +173,20 @@
         </div>
       </div>
     </div>
-
   </div>
 </template>
   <script>
-import { mapGetters, mapActions, mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 import Slider from "@/components/ui/filterbar";
 
 export default {
-  name: "Product",
+  name: "All Patients",
   components: {
     Slider,
   },
   data() {
     return {
-      quickViewProduct: [],
       searchQuery: null,
-      counter: 1,
-      priceArray: [],
       allfilters: [],
       items: [],
       filtered: false,
@@ -240,10 +199,6 @@ export default {
     };
   },
   computed: {
-    ...mapGetters({
-      filterProduct: "products/filterProducts",
-      tags: "products/setTags",
-    }),
     ...mapState({
       getPatients: (state) => state.patients.patients,
     }),
@@ -252,9 +207,7 @@ export default {
         const result = this.getPatients.filter(
           (item) =>
             item.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-            item.ward
-              .toLowerCase()
-              .includes(this.searchQuery.toLowerCase()) ||
+            item.ward.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
             item.state.toLowerCase().includes(this.searchQuery.toLowerCase())
         );
         if (result.length > 0) {
@@ -272,53 +225,42 @@ export default {
     ...mapActions({
       getAllPatients: "patients/getAllPatients",
     }),
+    // For Order By
+    filterQueryBy(event) {
+      if (event.target.value === "asc") {
+        this.getPatients.sort((a, b) => {
+          let fa = a.name.toLowerCase(),
+            fb = b.name.toLowerCase();
+          if (fa < fb) {
+            return -1;
+          }
+          if (fa > fb) {
+            return 1;
+          }
+        });
+      } else if (event.target.value === "desc") {
+        this.getPatients.reverse((a, b) => {
+          let fa = a.name.toLowerCase(),
+            fb = b.name.toLowerCase();
+          if (fa < fb) {
+            return -1;
+          }
+          if (fa > fb) {
+            return 1;
+          }
+        });
+      }
+    },
+    filterData(params) {
+      this.getAllPatients({ payload: params });
+    },
     //For getting image path
     getImgUrl(path) {
       return require("@/assets/images/" + path);
     },
 
-    // For Order By
-    onChangeSort(event) {
-      this.$store.dispatch("products/sortProducts", event.target.value);
-    },
-
-    //Filter by Category, Brand, Color
-    allfilter(selectedVal) {
-      this.allfilters = selectedVal;
-      this.$store.dispatch("products/setTags", selectedVal);
-    },
-
     collapseFilter() {
       this.filtered = !this.filtered;
-    },
-
-    //Price Filter
-    pricefilterArray(item) {
-      this.$store.dispatch("products/priceFilter", item);
-    },
-
-    //Add to cart
-    addToCart: function (product, qty) {
-      product.quantity = qty ? qty : 1;
-      this.$store.dispatch("products/addToCart", product);
-    },
-
-    //Quick View
-    quickView: function (product) {
-      this.modalShow = true;
-      return (this.quickViewProduct = product);
-    },
-    quickViewClose: function () {
-      this.modalShow = false;
-    },
-
-    //Quantity increment Decrement
-    increment() {
-      if (this.counter < this.quickViewProduct.stock) this.counter++;
-    },
-
-    decrement() {
-      if (this.counter > 1) this.counter--;
     },
 
     //Grid changes

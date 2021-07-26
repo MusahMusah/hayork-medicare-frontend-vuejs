@@ -14,7 +14,7 @@
         :placeholder="placeholder"
         @input="handleInput"
       />
-      <div v-if="inputType" class="show-hide" @click="showPassword">
+      <div v-if="name === 'Password'" class="show-hide" @click="showPassword">
         <span class="mr-2 show" v-if="inputType === 'password'"> </span>
         <span class="mr-2 hide" v-if="inputType === 'text'"> </span>
       </div>

@@ -5,12 +5,12 @@ export default {
     const res = await apiClient.post("/patient", payload)
     return res
   },
-  async getAllPatients() {
-    const res = await apiClient.get("/patient")
+  async getAllPatients(payload) {
+    const res = await apiClient.post("/allPatients", payload)
     return res
   },
-  async getSingleWorker(payload) {
-    const res = await apiClient.get(`/Patients/${payload}`)
+  async getSinglePatient(payload) {
+    const res = await apiClient.get(`/patient/${payload}`)
     return res
   },
 };

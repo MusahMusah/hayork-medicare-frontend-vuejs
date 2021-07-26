@@ -10,9 +10,9 @@
             :key="index"
           >
             <input
-              @change="appliedFilter(category)"
+              @change="appliedWrapperFilter(category)"
               :value="category"
-              v-model="applyFilter"
+              v-model="selected.ageFilter"
               class="checkbox_animated"
               :id="category"
               type="checkbox"
@@ -29,10 +29,10 @@
             :key="index"
           >
             <input
-              @change="appliedFilter(gender)"
+              @change="appliedWrapperFilter(gender)"
               class="checkbox_animated"
               :value="gender"
-              v-model="applyFilter"
+              v-model="selected.genderFilter"
               :id="gender"
               type="checkbox"
             />
@@ -62,6 +62,12 @@ export default {
           prevEl: ".swiper-button-prev",
         },
       },
+      selected: {
+        ageFilter: [],
+        genderFilter: [],
+      },
+      ageFilter: [],
+      genderFilter: [],
       categoryByAge: ['0-10', '11-20', '21-30', '31-40', '41-50', '51-Above'],
       categoryByGender: ['Male', 'Female']
     };
@@ -88,8 +94,10 @@ export default {
     isActive(filterItem) {
       return this.applyFilter.indexOf(filterItem) > -1;
     },
+    appliedWrapperFilter() {
+      this.$emit("appliedWrapperFilter", this.selected);
+    },
     appliedFilter() {
-      alert(this.applyFilter)
       this.$emit("allFilters", this.applyFilter);
     },
     sliderChange(event) {
