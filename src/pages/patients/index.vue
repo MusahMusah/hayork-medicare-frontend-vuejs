@@ -120,6 +120,7 @@
                   <input
                     class="form-control"
                     type="text"
+                    v-model="searchQuery"
                     placeholder="Search.."
                   />
                   <i class="fa fa-search"></i>
@@ -157,29 +158,46 @@
                   ? 'col-xl-12'
                   : 'col-xl-3 col-md-6',
               ]"
-              v-for="(product, index) in resultQuery"
+              v-for="(patient, index) in resultQuery"
               :key="index"
             >
               <div class="card custom-card">
                 <div class="card-profile">
                   <img
                     class="rounded-circle"
-                    src="../../assets/images/avatar.png"
+                    :src="patient.image"
+                    style="height: 101px; width:101px; object-fit:cover"
                     alt=""
                   />
                 </div>
                 <div class="mt-1 text-center profile-details">
-                  <h4>Johan Deo</h4>
-                  <h6>Doctor</h6>
+                  <h4>{{patient.name}}</h4>
+                  <h6>Patient</h6>
+                  <button
+                    @click="
+                      () =>
+                        $router.push({
+                          name: 'user-account',
+                          params: { id: patient.id },
+                        })
+                    "
+                    class="mb-3 btn btn-squre btn-outline-primary-2x"
+                  >
+                    View Profile
+                  </button>
                 </div>
                 <div class="card-footer row">
                   <div class="col-6 col-sm-6">
-                    <h6>Department</h6>
-                    <h3 class="counter">2578</h3>
+                    <h6>Gender</h6>
+                    <h3 class="counter">
+                      {{patient.gender}}
+                    </h3>
                   </div>
                   <div class="col-6 col-sm-6">
                     <h6>Age</h6>
-                    <h3><span class="counter">26</span>K</h3>
+                    <h3>
+                      {{patient.age}} years
+                    </h3>
                   </div>
                   <!-- <div class="col-4 col-sm-4">
                     <h6>Gender</h6>
@@ -193,90 +211,6 @@
       </div>
     </div>
 
-    <!-- QuickView Modal -->
-    <b-modal size="lg" v-model="modalShow" hide-footer hide-header>
-      <button
-        class="close"
-        type="button"
-        v-on:click="quickViewClose(modalShow)"
-      >
-        <span>×</span>
-      </button>
-      <div class="product-box quickview row">
-        <div class="product-img col-md-6">
-          <img
-            class="img-fluid"
-            :src="
-              getImgUrl(
-                modalShow ? quickViewProduct.images[0] : 'ecommerce/11.jpg'
-              )
-            "
-            alt=""
-          />
-        </div>
-        <div class="text-left product-details col-md-6">
-          <h4>{{ quickViewProduct.name }}</h4>
-          <div class="product-price">
-            {{ quickViewProduct.price | currency }}
-            <del>{{ quickViewProduct.salePrice | currency }}</del>
-          </div>
-          <div class="product-view">
-            <h6 class="f-w-600">Product Details</h6>
-            <p class="mb-0">
-              Sed ut perspiciatis, unde omnis iste natus error sit voluptatem
-              accusantium doloremque laudantium, totam rem aperiam eaque ipsa,
-              quae ab illo.
-            </p>
-          </div>
-          <div class="product-size">
-            <ul>
-              <li>
-                <button class="btn btn-outline-light" type="button">M</button>
-              </li>
-              <li>
-                <button class="btn btn-outline-light" type="button">L</button>
-              </li>
-              <li>
-                <button class="btn btn-outline-light" type="button">Xl</button>
-              </li>
-            </ul>
-          </div>
-          <div class="product-qnty">
-            <h6 class="f-w-600">Quantity</h6>
-            <div class="qty-box1">
-              <div class="input-group">
-                <i class="fa fa-minus btnGtr1" @click="decrement()"></i>
-                <input
-                  class="text-center touchspin1"
-                  v-model="counter"
-                  name="quantity"
-                  type="text"
-                />
-                <i class="fa fa-plus btnLess1" @click="increment()"></i>
-              </div>
-            </div>
-            <div class="mt-3 addcart-btn">
-              <router-link :to="'/ecommerce/cart'">
-                <button
-                  class="btn btn-primary m-r-10"
-                  type="button"
-                  data-original-title="btn btn-info-gradien"
-                  title
-                  @click="addToCart(quickViewProduct, counter)"
-                >
-                  Add To Cart
-                </button>
-              </router-link>
-              <router-link
-                :to="'/ecommerce/checkout'"
-                class="btn btn-primary cart-btn-transform"
-                >Buy Now</router-link
-              >
-            </div>
-          </div>
-        </div>
-      </div>
-    </b-modal>
   </div>
 </template>
   <script>
@@ -290,8 +224,8 @@ export default {
   },
   data() {
     return {
-      modalShow: false,
       quickViewProduct: [],
+      searchQuery: null,
       counter: 1,
       priceArray: [],
       allfilters: [],

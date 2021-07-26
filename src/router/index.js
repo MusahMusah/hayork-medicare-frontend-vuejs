@@ -30,7 +30,7 @@ const routes = [
         }
       },
       {
-        path: '/user-account',
+        path: '/user-account/:id',
         name: 'user-account',
         component: () => import('@/pages/account-settings/Profile.vue'),
         meta: {
