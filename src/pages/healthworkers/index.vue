@@ -110,7 +110,7 @@
             >
               <div class="card custom-card">
                 <div class="card-profile">
-                  <img class="rounded-circle" :src="worker.image" alt="" />
+                  <img class="rounded-circle" :src="worker.image" style="height: 101px; width:101px; object-fit:cover" alt="" />
                 </div>
                 <div class="mt-1 text-center profile-details">
                   <h4>{{ worker.name }}</h4>
