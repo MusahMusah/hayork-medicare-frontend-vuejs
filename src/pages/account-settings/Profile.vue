@@ -39,6 +39,7 @@
                 </div>
                 <div class="form-footer">
                   <button
+                    v-if="singlePatient.is_health_worker"
                     @click="() => $router.push({ name: 'patient-encounter', params: { id: singlePatient.id} })"
                     class="btn btn-primary btn-block"
                   >

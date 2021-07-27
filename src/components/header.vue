@@ -81,8 +81,7 @@
         ></feather>
       </div>
     </div>
-    <div class="pl-0 left-header col horizontal-wrapper">
-    </div>
+    <div class="pl-0 left-header col horizontal-wrapper"></div>
     <div class="p-0 nav-right col-8 pull-right right-header">
       <ul class="nav-menus">
         <li>
@@ -131,8 +130,16 @@
         </li>
         <li>
           <div class="mode">
-            <i class="fa fa-moon-o" v-show="mixLayout == 'light-only'" @click="customizeMixLayout('dark-only')"></i>
-            <i class="fa fa-lightbulb-o" v-show="mixLayout == 'dark-only'" @click="customizeMixLayout('light-only')"></i>
+            <i
+              class="fa fa-moon-o"
+              v-show="mixLayout == 'light-only'"
+              @click="customizeMixLayout('dark-only')"
+            ></i>
+            <i
+              class="fa fa-lightbulb-o"
+              v-show="mixLayout == 'dark-only'"
+              @click="customizeMixLayout('light-only')"
+            ></i>
           </div>
         </li>
         <li class="maximize">
@@ -146,35 +153,29 @@
         </li>
         <li class="p-0 mr-0 profile-nav onhover-dropdown">
           <div class="media profile-media">
-            <img
-              class="b-r-10"
-              src="../assets/images/dashboard/profile.jpg"
-              alt=""
-            />
+            <img class="b-r-10" :src="activeUser.image" alt="" />
             <div class="media-body">
-              <span>{{activeUser.name}}</span>
-              <p class="mb-0 font-roboto">
-                Admin <i class="middle fa fa-angle-down"></i>
+              <span>{{ activeUser.name }}</span>
+              <p class="mb-0 font-roboto" v-if="activeUser.is_health_worker">
+                Healthworker <i class="middle fa fa-angle-down"></i>
               </p>
             </div>
           </div>
           <ul class="profile-dropdown onhover-show-div">
-            <li>
-              <a href="#"
-                ><feather type="user"></feather><span>Account </span></a
-              >
+            <li
+              v-if="activeUser.is_health_worker"
+              @click="
+                () =>
+                  $router.push({
+                    name: 'healthworker-profile',
+                    params: { id: activeUser.id },
+                  })
+              "
+            >
+              <a><feather type="user"></feather><span>Account </span></a>
             </li>
-            <li>
-              <a href="#"><feather type="mail"></feather><span>Inbox</span></a>
-            </li>
-            <!-- <li>
-              <a href="#"
-                ><feather type="settings"></feather><span>Settings</span></a
-              >
-            </li> -->
             <li @click="logOutUser">
-              <a><feather type="log-in"></feather><span>Log out</span></a
-              >
+              <a><feather type="log-in"></feather><span>Log out</span></a>
             </li>
           </ul>
         </li>
@@ -210,7 +211,8 @@
     </script>
     <script class="empty-template" type="text/x-handlebars-template">
       <div class="EmptyMessage">
-        Your search turned up 0 results. This most likely means the backend is down, yikes!
+        Your search turned up 0 results. This most likely means the backend is
+        down, yikes!
       </div>
     </script>
   </div>
@@ -247,16 +249,16 @@ export default {
   },
   methods: {
     ...mapActions({
-      logOut: 'auth/logOut'
+      logOut: "auth/logOut",
     }),
     logOutUser() {
-      this.logOut()
-        // .then(() => {
-        //   this.$router.replace({ name: 'auth-login' })
-        // })
-        // .catch(() => {
-        //   this.$router.replace({ name: 'auth-login' })
-        // })
+      this.logOut();
+      // .then(() => {
+      //   this.$router.replace({ name: 'auth-login' })
+      // })
+      // .catch(() => {
+      //   this.$router.replace({ name: 'auth-login' })
+      // })
     },
     toggle_sidebar() {
       this.$store.dispatch("menu/opensidebar");

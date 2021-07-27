@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapState } from "vuex";
 
 export default {
   data() {
@@ -54,6 +54,11 @@ export default {
       },
     };
   },
+  computed: {
+    ...mapState({
+      activeUser: (state) => state.auth.user,
+    }),
+  },
   methods: {
     ...mapActions({
       login: "auth/login",
@@ -63,23 +68,32 @@ export default {
         if (success) {
           this.login(this.form)
             .then(() => {
-              this.$router.replace({ name: "dashboard" }).then(() => {
-                this.$vToastify.success(
-                  "👋 You have successfully logged in. Now you can start to explore!",
-                  `Welcome ${this.$store.state.auth.user.name}`
-                );
-              });
+              if (this.activeUser.is_health_worker) {
+                this.$router.replace({ name: "dashboard" }).then(() => {
+                  this.$vToastify.success(
+                    "👋 You have successfully logged in. Now you can start to explore!",
+                    `Welcome ${this.$store.state.auth.user.name}`
+                  );
+                });
+              } else {
+                this.$router.replace({ name: "user-account", params: {id: this.activeUser.id} }).then(() => {
+                  this.$vToastify.success(
+                    "👋 You have successfully logged in. Now you can start to explore!",
+                    `Welcome ${this.$store.state.auth.user.name}`
+                  );
+                });
+              }
             })
             .catch((e) => {
-              console.log(e.response.data.errors)
+              console.log(e.response.data.errors);
               if (e.response.status === 422) {
                 Object.entries(e.response.data.errors.email).forEach(
                   ([, value]) => {
-                    this.$vToastify.error(value)
+                    this.$vToastify.error(value);
                   }
                 );
-              } else if(e.response) {
-                this.$vToastify.error(e.response.data.message)
+              } else if (e.response) {
+                this.$vToastify.error(e.response.data.message);
               }
             });
         }
