@@ -406,9 +406,6 @@ export default {
         }
       });
     },
-    getImgUrl(path) {
-      return require("@/assets/images/" + path);
-    },
     healthWorkersList() {
       this.fetchAllHealthWorkers.map((options) => {
         this.imageOptions.push({

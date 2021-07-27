@@ -96,15 +96,6 @@ const routes = [
         }
       },
 
-      // Chats Messages
-      {
-        path: '/chats',
-        name: 'chats',
-        component: () => import('@/pages/chats/index.vue'),
-        meta: {
-          title: 'Page Title',
-        }
-      },
     ]
   },
 

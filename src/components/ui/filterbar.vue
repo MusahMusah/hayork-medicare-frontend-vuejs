@@ -44,9 +44,6 @@
   </div>
 </template>
 <script>
-import VueSlider from "vue-slider-component";
-import { mapGetters, mapState } from "vuex";
-import { swiper, swiperSlide } from "vue-awesome-swiper";
 import "swiper/dist/css/swiper.css";
 
 export default {
@@ -72,24 +69,6 @@ export default {
       categoryByGender: ['Male', 'Female']
     };
   },
-  components: {
-    VueSlider,
-    swiper,
-    swiperSlide,
-  },
-  computed: {
-    ...mapState({
-      products: (state) => state.products.products,
-    }),
-    ...mapGetters({
-      getCategory: "products/getCategory",
-      getBrand: "products/getBrands",
-      getColors: "products/getColors",
-    }),
-  },
-  mounted() {
-    this.$emit("priceVal", this.value);
-  },
   methods: {
     isActive(filterItem) {
       return this.applyFilter.indexOf(filterItem) > -1;
@@ -99,12 +78,6 @@ export default {
     },
     appliedFilter() {
       this.$emit("allFilters", this.applyFilter);
-    },
-    sliderChange(event) {
-      this.$emit("priceVal", event);
-    },
-    getImgUrl(path) {
-      return require("../../assets/images/" + path);
     },
   },
 };

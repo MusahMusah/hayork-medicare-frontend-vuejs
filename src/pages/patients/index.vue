@@ -162,10 +162,6 @@
                     <h6>Age</h6>
                     <h3>{{ patient.age }} years</h3>
                   </div>
-                  <!-- <div class="col-4 col-sm-4">
-                    <h6>Gender</h6>
-                    <h3><span class="counter">96</span>M</h3>
-                  </div> -->
                 </div>
               </div>
             </div>
@@ -254,11 +250,6 @@ export default {
     filterData(params) {
       this.getAllPatients({ payload: params });
     },
-    //For getting image path
-    getImgUrl(path) {
-      return require("@/assets/images/" + path);
-    },
-
     collapseFilter() {
       this.filtered = !this.filtered;
     },
