@@ -56,7 +56,7 @@
         <div class="col-sm-12">
           <div class="card">
             <div class="card-header card-no-border">
-              <h5>Patient Analytics by Gender {{this.dashboardData.analyticsByGender.male}}</h5>
+              <h5>Patient Analytics by Gender</h5>
             </div>
             <div class="card-body chart-block">
               <GChart
@@ -354,10 +354,14 @@ export default {
   }),
   computed: {
     ...mapState({
-      dashboardData: state => state.healthworkers.analyticsData
+      dashboardData: state => state.healthworkers.analyticsData,
+      activeUser: (state) => state.auth.user,
     })
   },
   created() {
+    if (!this.activeUser.is_health_worker) {
+      this.$router.replace({ name: "user-account", params:{ id: this.activeUser.id } }).catch(() => {})
+    }
     this.getAnalyticsData()
   },
   methods: {

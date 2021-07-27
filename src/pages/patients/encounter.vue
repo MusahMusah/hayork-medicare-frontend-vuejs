@@ -335,6 +335,7 @@ export default {
         date: '',
         time: "",
         visit_type: null,
+        healthworker: '',
         weight: "",
         bmi: "",
         bp: "",
@@ -393,11 +394,10 @@ export default {
           this.form.user_id = this.$route.params.id
           this.form.bmi = this.calculateBmi
           this.addEncounter(this.form).then((res) => {
-            console.log(res);
             if (res.status === 200 || res.status === 201) {
               this.$router.replace({ name: "patients" }).then(() => {
-                this.getAllPatients();
                 this.$vToastify.success("👋 Record Added successfully!");
+                this.getAllPatients();
               });
             } else {
               this.$vToastify.error("Error Occured");

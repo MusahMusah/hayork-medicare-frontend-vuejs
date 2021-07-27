@@ -7,7 +7,6 @@ import healthworker from "@/middleware/healthworker";
 import guest from "@/middleware/guest";
 import middlewarePipeline from "@/router/middlewarePipeline";
 import Body from '../components/body'
-import SamplePage from '../pages/sample_page'
 
 // component
 
@@ -23,7 +22,7 @@ const routes = [
       {
         path: '/dashboard',
         name: 'dashboard',
-        component: SamplePage,
+        component: () => import('@/pages/DashboardAnalytics.vue'),
         meta: {
           middleware: [auth, healthworker],
           title: 'Page Title',
@@ -74,7 +73,7 @@ const routes = [
         name: 'patients',
         component: () => import('@/pages/patients/index.vue'),
         meta: {
-          middleware: [auth],
+          middleware: [auth, healthworker],
           title: 'Page Title',
         }
       },
@@ -83,7 +82,7 @@ const routes = [
         name: 'register-patients',
         component: () => import('@/pages/patients/create.vue'),
         meta: {
-          middleware: [auth],
+          middleware: [auth, healthworker],
           title: 'Page Title',
         }
       },
@@ -92,7 +91,7 @@ const routes = [
         name: 'patient-encounter',
         component: () => import('@/pages/patients/encounter.vue'),
         meta: {
-          middleware: [auth],
+          middleware: [auth, healthworker],
           title: 'Page Title',
         }
       },
