@@ -1,72 +1,5 @@
 <template>
   <div class="m-0 header-wrapper row">
-    <form
-      class="form-inline search-full"
-      action="#"
-      method="get"
-      :class="{ open: searchOpen }"
-    >
-      <div class="form-group w-100">
-        <div class="Typeahead Typeahead--twitterUsers">
-          <div class="u-posRelative">
-            <input
-              class="demo-input Typeahead-input form-control-plaintext w-100"
-              type="text"
-              v-on:keyup="searchterm"
-              v-model="terms"
-              placeholder="Search Cuba .."
-              name="q"
-              title=""
-              autofocus
-            />
-            <div class="spinner-border Typeahead-spinner" role="status">
-              <span class="sr-only">Loading...</span>
-            </div>
-            <feather
-              class="close-search"
-              type="x"
-              @click="search_close()"
-            ></feather>
-          </div>
-          <div
-            :class="searchResult ? 'Typeahead-menu is-open' : 'Typeahead-menu'"
-            v-if="menuItems.length"
-          >
-            <div
-              class="ProfileCard u-cf"
-              v-for="(menuItem, index) in menuItems.slice(0, 8)"
-              :key="index"
-            >
-              <div class="ProfileCard-avatar header-search">
-                <!-- <feather :type="menuItem.icon"></feather> -->
-              </div>
-              <div class="ProfileCard-details">
-                <div class="ProfileCard-realName">
-                  <span @click="removeFix()"
-                    ><router-link
-                      :to="{ path: menuItem.path }"
-                      class="realname"
-                      >{{ menuItem.title }}</router-link
-                    ></span
-                  >
-                </div>
-              </div>
-            </div>
-          </div>
-          <div
-            :class="
-              searchResultEmpty ? 'Typeahead-menu is-open' : 'Typeahead-menu'
-            "
-          >
-            <div class="tt-dataset tt-dataset-0">
-              <div class="EmptyMessage">
-                Your search turned up 0 results. Opps There are no result found.
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </form>
     <div class="header-logo-wrapper">
       <div class="logo-wrapper">
         <router-link to="/">
@@ -81,58 +14,21 @@
         ></feather>
       </div>
     </div>
-    <div class="pl-0 left-header col horizontal-wrapper">
-    </div>
+    <div class="pl-0 left-header col horizontal-wrapper"></div>
     <div class="p-0 nav-right col-8 pull-right right-header">
       <ul class="nav-menus">
         <li>
-          <span class="header-search"
-            ><feather type="search" @click="search_open()"></feather
-          ></span>
-        </li>
-        <li class="onhover-dropdown">
-          <div class="notification-box">
-            <feather type="bell"></feather
-            ><span class="badge badge-pill badge-secondary">4 </span>
-          </div>
-          <ul class="notification-dropdown onhover-show-div">
-            <li>
-              <feather type="bell"></feather>
-              <h6 class="mb-0 f-18">Notitications</h6>
-            </li>
-            <li>
-              <p>
-                <i class="mr-3 fa fa-circle-o font-primary"> </i>Delivery
-                processing <span class="pull-right">10 min.</span>
-              </p>
-            </li>
-            <li>
-              <p>
-                <i class="mr-3 fa fa-circle-o font-success"></i>Order
-                Complete<span class="pull-right">1 hr</span>
-              </p>
-            </li>
-            <li>
-              <p>
-                <i class="mr-3 fa fa-circle-o font-info"></i>Tickets
-                Generated<span class="pull-right">3 hr</span>
-              </p>
-            </li>
-            <li>
-              <p>
-                <i class="mr-3 fa fa-circle-o font-danger"></i>Delivery
-                Complete<span class="pull-right">6 hr</span>
-              </p>
-            </li>
-            <li>
-              <a class="btn btn-primary" href="#">Check all notification</a>
-            </li>
-          </ul>
-        </li>
-        <li>
           <div class="mode">
-            <i class="fa fa-moon-o" v-show="mixLayout == 'light-only'" @click="customizeMixLayout('dark-only')"></i>
-            <i class="fa fa-lightbulb-o" v-show="mixLayout == 'dark-only'" @click="customizeMixLayout('light-only')"></i>
+            <i
+              class="fa fa-moon-o"
+              v-show="mixLayout == 'light-only'"
+              @click="customizeMixLayout('dark-only')"
+            ></i>
+            <i
+              class="fa fa-lightbulb-o"
+              v-show="mixLayout == 'dark-only'"
+              @click="customizeMixLayout('light-only')"
+            ></i>
           </div>
         </li>
         <li class="maximize">
@@ -146,35 +42,29 @@
         </li>
         <li class="p-0 mr-0 profile-nav onhover-dropdown">
           <div class="media profile-media">
-            <img
-              class="b-r-10"
-              src="../assets/images/dashboard/profile.jpg"
-              alt=""
-            />
+            <img class="b-r-10" :src="activeUser.image" alt="" />
             <div class="media-body">
-              <span>{{activeUser.name}}</span>
-              <p class="mb-0 font-roboto">
-                Admin <i class="middle fa fa-angle-down"></i>
+              <span>{{ activeUser.name }}</span>
+              <p class="mb-0 font-roboto" v-if="activeUser.is_health_worker">
+                Healthworker <i class="middle fa fa-angle-down"></i>
               </p>
             </div>
           </div>
           <ul class="profile-dropdown onhover-show-div">
-            <li>
-              <a href="#"
-                ><feather type="user"></feather><span>Account </span></a
-              >
+            <li
+              v-if="activeUser.is_health_worker"
+              @click="
+                () =>
+                  $router.push({
+                    name: 'healthworker-profile',
+                    params: { id: activeUser.id },
+                  })
+              "
+            >
+              <a><feather type="user"></feather><span>Account </span></a>
             </li>
-            <li>
-              <a href="#"><feather type="mail"></feather><span>Inbox</span></a>
-            </li>
-            <!-- <li>
-              <a href="#"
-                ><feather type="settings"></feather><span>Settings</span></a
-              >
-            </li> -->
             <li @click="logOutUser">
-              <a><feather type="log-in"></feather><span>Log out</span></a
-              >
+              <a><feather type="log-in"></feather><span>Log out</span></a>
             </li>
           </ul>
         </li>
@@ -208,17 +98,11 @@
         </div>
       </div>
     </script>
-    <script class="empty-template" type="text/x-handlebars-template">
-      <div class="EmptyMessage">
-        Your search turned up 0 results. This most likely means the backend is down, yikes!
-      </div>
-    </script>
   </div>
 </template>
 <script>
 var body = document.getElementsByTagName("body")[0];
 import { mapState, mapActions } from "vuex";
-// import app from "../main";
 export default {
   name: "Search",
   data() {
@@ -247,16 +131,10 @@ export default {
   },
   methods: {
     ...mapActions({
-      logOut: 'auth/logOut'
+      logOut: "auth/logOut",
     }),
     logOutUser() {
-      this.logOut()
-        // .then(() => {
-        //   this.$router.replace({ name: 'auth-login' })
-        // })
-        // .catch(() => {
-        //   this.$router.replace({ name: 'auth-login' })
-        // })
+      this.logOut();
     },
     toggle_sidebar() {
       this.$store.dispatch("menu/opensidebar");

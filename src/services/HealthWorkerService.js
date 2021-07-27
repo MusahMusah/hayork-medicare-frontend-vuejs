@@ -13,4 +13,8 @@ export default {
     const res = await apiClient.get(`/healthworker/${payload}`)
     return res
   },
+  async getAnalyticsData() {
+    const res = await apiClient.get('/analytics')
+    return res
+  },
 };

@@ -3,40 +3,38 @@
     {
       "headTitle1": "Dashboard Analytics",
       "headTitle2": "Records and Analytics",
-      "type": "headtitle"
+      "type": "headtitle",
+      "isHealthWorker": true
     },
     {
       "path": "/dashboard",
       "title": "Dashboard", 
       "icon": "home", 
       "type": "link",  
-      "active": false
+      "active": false,
+      "isHealthWorker": true
     },
     {
       "path": "/user-account",
       "title": "Account", 
       "icon": "user", 
       "type": "link",  
-      "active": false
-    },
-    {
-      "path": "/healthworker/profile/122323",
-      "title": "Account", 
-      "icon": "user", 
-      "type": "link",  
-      "active": false
+      "active": false,
+      "isHealthWorker": false
     },
 
     {
       "headTitle1": "Health Workers",
       "headTitle2": "All Health Workers related actions",
-      "type": "headtitle"
+      "type": "headtitle",
+      "isHealthWorker": true
     },
     {
       "title": "Health Workers",
       "icon": "airplay",
       "type": "sub",
       "active": false,
+      "isHealthWorker": true,
       "children": [
         {
           "path": "/healthworkers",
@@ -54,19 +52,16 @@
     {
       "headTitle1": "Patients Module",
       "headTitle2": "Patients module and filters",
-      "type": "headtitle"
+      "type": "headtitle",
+      "isHealthWorker": true
     },
     {
       "title": "Patients",
       "icon": "airplay",
       "type": "sub",
       "active": false,
+      "isHealthWorker": true,
       "children": [
-        {
-          "path": "/project/projectlist",
-          "title": "All Patients Encounter",
-          "type": "link"
-        },
         {
           "path": "/patients",
           "title": "All Patients / Filter",
@@ -78,19 +73,6 @@
           "type": "link"
         }
       ]
-    },
-
-    {
-      "headTitle1": "Chats",
-      "headTitle2": "All your chats messages",
-      "type": "headtitle"
-    },
-    {
-      "path": "/chats",
-      "title": "Chats", 
-      "icon": "mail", 
-      "type": "link",  
-      "active": false
     }
 
   ]

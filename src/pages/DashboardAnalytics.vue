@@ -13,7 +13,7 @@
                 </div>
                 <div class="media-body">
                   <span class="m-0">Doctors</span>
-                  <h4 class="mb-0 counter">45631</h4>
+                  <h4 class="mb-0 counter">{{dashboardData.doctorsCounts}}</h4>
                   <feather type="users" class="icon-bg"></feather>
                 </div>
               </div>
@@ -29,7 +29,7 @@
                 </div>
                 <div class="media-body">
                   <span class="m-0">Patients</span>
-                  <h4 class="mb-0 counter">9856</h4>
+                  <h4 class="mb-0 counter">{{dashboardData.patientCounts}}</h4>
                 </div>
               </div>
             </div>
@@ -44,12 +44,30 @@
                 </div>
                 <div class="media-body">
                   <span class="m-0">Total Encounter</span>
-                  <h4 class="mb-0 counter">6659</h4>
+                  <h4 class="mb-0 counter">{{dashboardData.totalEncounter}}</h4>
                   <feather type="navigation" class="icon-bg"></feather>
                 </div>
               </div>
             </div>
           </px-card>
+        </div>
+      </div>
+       <div class="row">
+        <div class="col-sm-12">
+          <div class="card">
+            <div class="card-header card-no-border">
+              <h5>Patient Analytics by Gender</h5>
+            </div>
+            <div class="card-body chart-block">
+              <GChart
+                class="chart-overflow"
+                id="pie-chart2"
+                type="PieChart"
+                :data="dashboardData.analyticsByGender"
+                :options="pie_chart.options_2"
+              />
+            </div>
+          </div>
         </div>
       </div>
       <div class="row size-column">
@@ -85,9 +103,6 @@
                       <h4 class="f-w-500 font-roboto">
                         Patients Analytics by age
                       </h4>
-                      <p>
-                        <span class="ml-2 f-w-700 font-primary">35.00%</span>
-                      </p>
                     </div>
                   </div>
                 </div>
@@ -98,30 +113,15 @@
                         height="105"
                         type="bar"
                         :options="apexTotalvisit.options"
-                        :series="apexTotalvisit.series"
+                        :series="[{ 
+                          name: 'age',
+                          data: dashboardData.analyticsByAge.data
+                          }]"
                       ></apexchart>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-12">
-          <div class="card">
-            <div class="card-header card-no-border">
-              <h5>Patient Analytics by Gender</h5>
-            </div>
-            <div class="card-body chart-block">
-              <GChart
-                class="chart-overflow"
-                id="pie-chart2"
-                type="PieChart"
-                :data="pie_chart.chartData_1"
-                :options="pie_chart.options_2"
-              />
             </div>
           </div>
         </div>
@@ -132,6 +132,7 @@
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex'
 import { GChart } from "vue-google-charts";
 var primary = localStorage.getItem("primary_color") || "#7366ff";
 var secondary = localStorage.getItem("secondary_color") || "#f73164";
@@ -267,18 +268,16 @@ export default {
         },
         xaxis: {
           categories: [
-            "(0-7) years",
-            "Feb",
-            "Mar",
-            "Apr",
-            "May",
-            "Jun",
-            "Jul",
-            "Aug",
-            "Sep",
-            "Oct",
-            "Nov",
-            "Dec",
+            "(0-10) years",
+            "(11-20) years",
+            "(21-30) years",
+            "(31-40) years",
+            "(41-50) years",
+            "(51-60) years",
+            "(61-70) years",
+            "(71-80) years",
+            "(81-90) years",
+            "(91- Above)",
           ],
           position: "bottom",
 
@@ -333,7 +332,7 @@ export default {
       },
       series: [
         {
-          name: "(0-7) years",
+          name: "",
           data: [2.3, 5.1, 3.0, 9.1, 2.0, 4.6, 2.2, 9.3, 5.4, 4.8, 3.5, 5.2],
         },
       ],
@@ -345,7 +344,7 @@ export default {
         ["Female", 300],
       ],
       options_2: {
-        title: "My Daily Activities",
+        title: "Daily Analytics",
         is3D: true,
         width: "100%",
         height: 400,
@@ -353,5 +352,22 @@ export default {
       },
     },
   }),
+  computed: {
+    ...mapState({
+      dashboardData: state => state.healthworkers.analyticsData,
+      activeUser: (state) => state.auth.user,
+    })
+  },
+  created() {
+    if (!this.activeUser.is_health_worker) {
+      this.$router.replace({ name: "user-account", params:{ id: this.activeUser.id } }).catch(() => {})
+    }
+    this.getAnalyticsData()
+  },
+  methods: {
+    ...mapActions({
+      getAnalyticsData: 'healthworkers/getAnalyticsData'
+    })
+  }
 };
 </script>

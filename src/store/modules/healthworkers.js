@@ -3,6 +3,7 @@ import HealthWorkerService from "@/services/HealthWorkerService";
 const state = {
     healthWorkers: [],
     singleWorker: [],
+    analyticsData: [],
 }
 
 // getters
@@ -16,6 +17,9 @@ const mutations = {
     },
     SET_SINGLE_WORKER(state, data) {
         return state.singleWorker = data
+    },
+    SET_DASHBOARD_ANALYTICS(state, data) {
+        return state.analyticsData = data
     },
 };
 
@@ -33,7 +37,13 @@ const actions = {
         const res = await HealthWorkerService.getSingleWorker(payload)
         commit('SET_SINGLE_WORKER', res.data.data)
         return res
-    }
+    },
+    async getAnalyticsData({ commit }) {
+        const res = await HealthWorkerService.getAnalyticsData()
+        commit('SET_DASHBOARD_ANALYTICS', res.data)
+        return res
+    },
+
 }
 
 export default {

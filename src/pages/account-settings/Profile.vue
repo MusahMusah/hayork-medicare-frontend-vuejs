@@ -39,6 +39,7 @@
                 </div>
                 <div class="form-footer">
                   <button
+                    v-if="activeUser.is_health_worker"
                     @click="() => $router.push({ name: 'patient-encounter', params: { id: singlePatient.id} })"
                     class="btn btn-primary btn-block"
                   >
@@ -148,6 +149,7 @@ export default {
   computed: {
     ...mapState({
       singlePatient: (state) => state.patients.singlePatient,
+      activeUser: (state) => state.auth.user,
     }),
   },
   created() {
@@ -160,7 +162,6 @@ export default {
     validateSinglePatient() {
       this.getSinglePatient(this.$route.params.id)
         .then((res) => {
-          console.log(res);
           if (!(res.status === 201 || res.status === 200)) {
             this.$router.replace({ name: "Error404" }).catch(() => {});
           }
